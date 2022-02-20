@@ -20,11 +20,17 @@
               </el-menu-item>
             </el-menu-item-group>
             <el-menu-item-group title="Group 2">
-              <el-menu-item index="1-3">Option 3</el-menu-item>
+              <el-menu-item index="1-3"
+                ><router-link to="/setting">
+                  首页设置
+                </router-link></el-menu-item
+              >
             </el-menu-item-group>
             <el-sub-menu index="1-4">
               <template #title>Option4</template>
-              <el-menu-item index="1-4-1">Option 4-1</el-menu-item>
+              <el-menu-item index="1-4-1">
+                <router-link to="/text"> 路由 </router-link>
+              </el-menu-item>
             </el-sub-menu>
           </el-sub-menu>
           <el-sub-menu index="2">

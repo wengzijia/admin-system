@@ -1,6 +1,6 @@
 import axios from 'axios'
 // post请求
-function post(url, data = {}, method = 'post') {
+export function post(url, data = {}, method = 'post') {
   let token = localStorage.getItem('token')
   return new Promise((resolve, reject) => {
     axios({
@@ -24,7 +24,7 @@ function post(url, data = {}, method = 'post') {
 }
 
 // get请求
-function get(url, data = {}, method = 'get') {
+export function get(url, data = {}, method = 'get') {
   let token = localStorage.getItem('token')
   return new Promise((resolve, reject) => {
     axios({
@@ -73,8 +73,3 @@ function upImg(url, data = {}, method = 'post') {
   })
 }
 
-export default {
-  post: post,
-  get: get,
-  upImg: upImg
-}
