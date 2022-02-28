@@ -3,7 +3,7 @@
     <div style="height: 30px">
       <el-row>
         <el-col :span="6"> 菜单列 </el-col>
-        <el-col :span="18"> title </el-col>
+        <el-col :span="18"> 当前所属：{{ fileName }} </el-col>
       </el-row>
     </div>
     <el-row>
@@ -11,7 +11,7 @@
         <el-tree
           :allow-drop="allowDrop"
           :allow-drag="allowDrag"
-          :data="data"
+          :data="treeModel"
           draggable
           default-expand-all
           node-key="id"
@@ -20,6 +20,7 @@
           @node-drop="handleDrop"
           @node-contextmenu="rightClick"
           @node-click="nodeClick"
+          :props="{ label: 'imgFileName', children: 'childNode' }"
         >
         </el-tree>
         <div
@@ -28,7 +29,7 @@
           @mouseleave="menuVisible = !menuVisible"
         >
           <el-card class="box-card">
-            <div class="text item">
+            <div class="text item" @click="addFile">
               <el-link :underline="false" :icon="FolderAdd"> 添加</el-link>
             </div>
             <div class="text item">
@@ -42,8 +43,9 @@
       </el-col>
       <el-col :span="18">
         <el-row>
+          <!-- 文件夹 -->
           <el-col
-            v-for="(item, index) in children"
+            v-for="(item, index) in filesData"
             :key="index"
             :span="5"
             style="
@@ -55,13 +57,12 @@
           >
             <el-icon :size="140"><folder /></el-icon>
             <div class="flex-center">
-              <p style="text-align: center">{{ item.label }}</p>
-              <p style="text-align: center">添加时间</p>
+              <p style="text-align: center">{{ item.imgFileName }}</p>
             </div>
           </el-col>
-
+          <!-- 图片 -->
           <el-col
-            v-for="item in 5"
+            v-for="item in imagesData"
             :key="item"
             :span="5"
             style="
@@ -73,18 +74,35 @@
           >
             <el-image
               style="width: 100%; height: 140px"
-              :src="url"
-              :preview-src-list="srcList"
+              :src="item.url"
+              :preview-src-list="imagesList"
               :initial-index="1"
             />
             <div class="flex-center">
-              <p style="text-align: center">图片名称</p>
-              <p style="text-align: center">添加时间</p>
+              <p style="text-align: center">{{ item.name }}</p>
             </div>
+          </el-col>
+          <!-- 上传 -->
+          <el-col
+            style="height: 180px; margin-left: 10px; margin-top: 10px"
+            :span="5"
+          >
+            <el-upload
+              action="http://101.43.46.172:9901/bjcc/img/fileUpload"
+              class="avatar-uploader"
+              :data="{ imgId: 3 }"
+              :show-file-list="false"
+              :before-upload="beforeAvatarUpload"
+              :on-success="handleAvatarSuccess"
+              :headers="headers"
+            >
+              <el-icon class="avatar-uploader-icon"><plus /></el-icon>
+            </el-upload>
           </el-col>
         </el-row>
       </el-col>
     </el-row>
+    <fileDialog :visible="Visible" @close="dialogClose" :id="fileId" />
   </div>
 </template>
 
@@ -93,13 +111,28 @@ import type Node from 'element-plus/es/components/tree/src/model/node';
 import type { DragEvents } from 'element-plus/es/components/tree/src/model/useDragNode';
 import type { DropType } from 'element-plus/es/components/tree/src/tree.type';
 import { ref } from 'vue-demi';
+import { addImgFileAPI, queryAllFile, fileUploadAPI } from '@/api/imageSpace';
+import { ElMessageBox, ElMessage } from 'element-plus';
 import {
   FolderAdd,
   DeleteFilled,
   EditPen,
   Folder,
+  Plus,
 } from '@element-plus/icons-vue';
+import fileDialog from './components/fileDialog.vue';
 
+const treeModel = ref([]);
+let fileName = ref(null);
+const getTreeData = () => {
+  queryAllFile().then((res) => {
+    console.log(res);
+    treeModel.value = res.data.fileNodeList;
+    fileName.value = treeModel.value[0].imgFileName;
+    nodeClick(treeModel.value[0]);
+  });
+};
+getTreeData();
 const handleDragStart = (node: Node, ev: DragEvents) => {
   console.log('drag start', node);
 };
@@ -130,77 +163,54 @@ const allowDrag = (draggingNode: Node) => {
   return draggingNode.data.label.indexOf('Level three 3-1-1') === -1;
 };
 
-const url =
-  'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg';
-const srcList = [
-  'https://fuss10.elemecdn.com/8/27/f01c15bb73e1ef3793e64e6b7bbccjpeg.jpeg',
-  'https://fuss10.elemecdn.com/1/8e/aeffeb4de74e2fde4bd74fc7b4486jpeg.jpeg',
-];
-
-let children = ref([]); // 文件子集
-const nodeClick = (item) => {
-  children.value = item.children;
+// 文件夹 新增
+const Visible = ref(false);
+const addFileId = ref(false);
+const fileId = ref(null);
+const addFile = () => {
+  Visible.value = true;
+  addFileId.value = fileId;
+  console.log('as', Visible.value);
 };
 
-const data = [
-  {
-    label: 'Level one 1',
-    children: [
-      {
-        label: 'Level two 1-1',
-        children: [
-          {
-            label: 'Level three 1-1-1',
-          },
-        ],
-      },
-    ],
-  },
-  {
-    label: 'Level one 2',
-    children: [
-      {
-        label: 'Level two 2-1',
-        children: [
-          {
-            label: 'Level three 2-1-1',
-          },
-        ],
-      },
-      {
-        label: 'Level two 2-2',
-        children: [
-          {
-            label: 'Level three 2-2-1',
-          },
-        ],
-      },
-    ],
-  },
-  {
-    label: 'Level one 3',
-    children: [
-      {
-        label: 'Level two 3-1',
-        children: [
-          {
-            label: 'Level three 3-1-1',
-          },
-        ],
-      },
-      {
-        label: 'Level two 3-2',
-        children: [
-          {
-            label: 'Level three 3-2-1',
-          },
-        ],
-      },
-    ],
-  },
-];
+let children = ref([]); // 文件子集
+let filesData = ref([]);
+let imagesData = ref([]);
+let imagesList = ref([]);
+const nodeClick = (item) => {
+  filesData.value = item.childNode;
+  imagesData.value = item.fileDtoList;
+  imagesList.value = item.fileDtoList.map((item) => item.url);
+  children.value = item.children;
+  fileName.value = item.imgFileName;
+};
+
+// 上传图片
+const beforeAvatarUpload = (file) => {
+  const isJPG = file.type === 'image/jpeg';
+  const isLt2M = file.size / 1024 / 1024 < 5;
+  console.log('file:', file);
+  return true;
+};
+
+const headers = {
+  token: localStorage.getItem('token'),
+  contentType: 'multipart/form-data',
+};
+
+const handleAvatarSuccess = (res) => {
+  imagesData.value = res.data.fileDtoList;
+  imagesList.value = imagesData.value.map((item) => item.url);
+};
+
+const dialogClose = () => {
+  Visible.value = false;
+  getTreeData();
+};
+
 let menuVisible = ref(false);
 function rightClick(MouseEvent: any, object: any, Node: any, element: any) {
+  fileId.value = object.fileId;
   debugger;
   menuVisible.value = true;
   let menu: any = document.querySelector('#menu');
@@ -212,10 +222,29 @@ function rightClick(MouseEvent: any, object: any, Node: any, element: any) {
     (MouseEvent.clientY - 25) +
     'px; z-index: 999; cursor:pointer;';
 }
-function treeAdd() {
-  alert('add');
-}
-function treeRemove() {
-  menuVisible.value = true;
-}
 </script>
+
+<style scoped>
+.avatar-uploader .el-upload {
+  border: 1px dashed #d9d9d9;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.avatar-uploader .el-upload:hover {
+  border-color: #409eff;
+}
+.el-icon.avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 178px;
+  height: 178px;
+  text-align: center;
+}
+.avatar {
+  width: 178px;
+  height: 178px;
+  display: block;
+}
+</style>

@@ -50,7 +50,7 @@ export function get(url, data = {}, method = 'get') {
 }
 
 //上传图片请求
-function upImg(url, data = {}, method = 'post') {
+export function upImg(url, data = {}, method = 'post') {
   let token = localStorage.getItem('token')
   return new Promise((resolve, reject) => {
     axios({
