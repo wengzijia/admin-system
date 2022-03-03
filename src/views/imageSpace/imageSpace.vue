@@ -33,10 +33,10 @@
               <el-link :underline="false" :icon="FolderAdd"> 添加</el-link>
             </div>
             <div class="text item">
-              <el-link :underline="false" :icon="DeleteFilled">删除</el-link>
-            </div>
-            <div class="text item">
               <el-link :underline="false" :icon="EditPen">编辑</el-link>
+            </div>
+            <div class="text item" @click="deleteFile(2)">
+              <el-link :underline="false" :icon="DeleteFilled">删除</el-link>
             </div>
           </el-card>
         </div>
@@ -111,7 +111,7 @@ import type Node from 'element-plus/es/components/tree/src/model/node';
 import type { DragEvents } from 'element-plus/es/components/tree/src/model/useDragNode';
 import type { DropType } from 'element-plus/es/components/tree/src/tree.type';
 import { ref } from 'vue-demi';
-import { addImgFileAPI, queryAllFile, fileUploadAPI } from '@/api/imageSpace';
+import { addImgFileAPI, queryAllFile, fileDelAPI } from '@/api/imageSpace';
 import { ElMessageBox, ElMessage } from 'element-plus';
 import {
   FolderAdd,
@@ -126,8 +126,8 @@ const treeModel = ref([]);
 let fileName = ref(null);
 const getTreeData = () => {
   queryAllFile().then((res) => {
-    console.log(res);
-    treeModel.value = res.data.fileNodeList;
+    console.log(res.data.fileNodeRespList);
+    treeModel.value = res.data.fileNodeRespList;
     fileName.value = treeModel.value[0].imgFileName;
     nodeClick(treeModel.value[0]);
   });
@@ -167,10 +167,40 @@ const allowDrag = (draggingNode: Node) => {
 const Visible = ref(false);
 const addFileId = ref(false);
 const fileId = ref(null);
+const imgFileName = ref(null);
 const addFile = () => {
   Visible.value = true;
   addFileId.value = fileId;
   console.log('as', Visible.value);
+};
+const deleteFile = (type) => {
+  if (!type) return;
+  ElMessageBox.confirm('This is a message', 'Title', {
+    confirmButtonText: 'OK',
+    cancelButtonText: 'Cancel',
+    type: 'warning',
+  })
+    .then(() => {
+      fileDelAPI({
+        fileType: type,
+        parentImgId: 3,
+        fileName: imgFileName.value,
+      }).then((res) => {
+        res.code === 200 &&
+          ElMessage({
+            type: 'success',
+            message: '删除成功',
+          });
+
+        getTreeData();
+      });
+    })
+    .catch(() => {
+      ElMessage({
+        type: 'info',
+        message: '已取消删除',
+      });
+    });
 };
 
 let children = ref([]); // 文件子集
@@ -211,6 +241,7 @@ const dialogClose = () => {
 let menuVisible = ref(false);
 function rightClick(MouseEvent: any, object: any, Node: any, element: any) {
   fileId.value = object.fileId;
+  imgFileName.value = object.imgFileName;
   debugger;
   menuVisible.value = true;
   let menu: any = document.querySelector('#menu');

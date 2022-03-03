@@ -7,7 +7,11 @@ import url from '@/utils/url.js'
 export const addImgFileAPI = (data) => {
   return post(`${url}bjcc/img/addImgFile`,data)
 }
-
+/**
+ * 查询所有文件
+ * @param {*} data 
+ * @returns 
+ */
 export const queryAllFile = (data) => {
   return post(`${url}/bjcc/img/queryAllFile`,data)
 }
@@ -22,10 +26,10 @@ export const fileUploadAPI = (data) => {
   return upImg(`${url}bjcc/img/fileUpload`,data)
 }
 /**
- * 
+ * 删除文件 1-文件 2-文件夹
  * @param {*} data 
  * @returns 
  */
-export const updateMenuAPI = (data) => {
-  return post(`${url}/bjcc/sp/updateMenu`,data)
+export const fileDelAPI = (data) => {
+  return post(`${url}/bjcc/img/fileDel`,data)
 }
