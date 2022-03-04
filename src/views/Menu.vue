@@ -18,6 +18,9 @@
               <el-menu-item index="1-2">
                 <router-link to="/imageSpace"> 图片空间 </router-link>
               </el-menu-item>
+              <el-menu-item index="1-10">
+                <router-link to="/home"> 小程序首页 </router-link>
+              </el-menu-item>
             </el-menu-item-group>
             <el-menu-item-group title="Group 2">
               <el-menu-item index="1-3"
