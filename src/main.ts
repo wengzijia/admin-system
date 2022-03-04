@@ -16,15 +16,15 @@ router.beforeEach((to,from,next) => {
 })
 
 // 配置一个响应拦截器，拦截所有的后台响应
-// axios.interceptors.response.use(function (res) {
-//   if (res.data.code === 10001) {
-//     console.log('sss', res.data.code, vm.$router);
-//     vm.$router.push('/home')
-//   }
-//   return res
-// }, function (err) {
-//   // 处理响应的错误信息
-//   console.log(err)
-// })
+axios.interceptors.response.use(function (res) {
+  // 100003 token 失效
+  if (res.data.code === 100003) {
+    router.replace({path:'login'})
+  }
+  return res
+}, function (err) {
+  // 处理响应的错误信息
+  console.log(err)
+})
 
 createApp(App).use(ElementPlus).use(store).use(router).mount('#app')

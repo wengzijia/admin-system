@@ -92,9 +92,27 @@
 
       <el-main>
         <el-scrollbar>
-          <router-view></router-view>
+          <el-card :body-style="{ padding: '20px',width:'100%',height:'100%' }">
+            <router-view></router-view>
+          </el-card>
         </el-scrollbar>
       </el-main>
     </el-container>
   </el-container>
 </template>
+
+<script lang="ts">
+import { ref } from 'vue';
+import { queryMenuAPI } from '@/api/menu.js'
+export default {
+  setup() {
+    const menuData = ref();
+    queryMenuAPI().then(res => {
+      console.log('menu=>', res)
+    })
+    return {
+      menuData
+    }
+  }
+}
+</script>

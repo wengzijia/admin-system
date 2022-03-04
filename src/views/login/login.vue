@@ -23,7 +23,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref } from 'vue';
+import { defineComponent, reactive } from 'vue';
 import { loginAPI } from '@/api/login';
 import { useRouter } from 'vue-router';
 
