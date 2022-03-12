@@ -11,8 +11,8 @@ export function queryMenuAPI_(data) {
     return post(`${url}/bjcc/sp/queryMenu`, data)
 }
 /**
- *  查询当前用户菜单
+ *  查询当前用户
  */
-export function queryMenuAPI(data) {
-    return post(`${url}bjcc/authConfig/queryMenu`, data)
+export const queryUserAPI = (data) => {
+    return post(`${url}bjcc/authConfig/queryUser`, data)
 }

@@ -16,12 +16,42 @@ export default {
       {
         name: 'as',
         model: 'as',
-        label: 'as',
+        label: '商品分类',
       },
       {
         name: 'as',
         model: 'as',
-        label: 'ass',
+        label: '商品名称',
+      },
+      {
+        name: 'as',
+        model: 'as',
+        label: '商品图片',
+      },
+      {
+        name: 'as',
+        model: 'as',
+        label: '商品编码',
+      },
+      {
+        name: 'as',
+        model: 'as',
+        label: '商品价格',
+      },
+      {
+        name: 'as',
+        model: 'as',
+        label: '商品库存',
+      },
+      {
+        name: 'as',
+        model: 'as',
+        label: '商品状态',
+      },
+      {
+        name: 'as',
+        model: 'as',
+        label: '更新时间',
       },
     ]);
     return {

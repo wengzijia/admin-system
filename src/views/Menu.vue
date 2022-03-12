@@ -34,6 +34,12 @@
               <el-menu-item index="1-4-1">
                 <router-link to="/text"> 路由 </router-link>
               </el-menu-item>
+              <el-menu-item index="1-4-2">
+                <router-link to="/role"> 角色 </router-link>
+              </el-menu-item>
+              <el-menu-item index="1-4-3">
+                <router-link to="/user"> 用户 </router-link>
+              </el-menu-item>
             </el-sub-menu>
           </el-sub-menu>
           <el-sub-menu index="2">
