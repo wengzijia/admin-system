@@ -1,18 +1,22 @@
-import {get, post } from '@/utils/request.js'
+import { post } from '@/utils/request.js'
 import url from '@/utils/url.js'
 
-export function addMenuAPI(data) {
-    console.log(post);
-    return post(`${url}/bjcc/sp/addMenu`, data)
-}
-
-export function queryMenuAPI_(data) {
-    console.log(post);
-    return post(`${url}/bjcc/sp/queryMenu`, data)
-}
 /**
  *  查询当前用户菜单
  */
 export function queryMenuAPI(data) {
     return post(`${url}bjcc/authConfig/queryMenu`, data)
+}
+/**
+ *  添加菜单
+ */
+export function addMenuAPI(data) {
+    return post(`${url}bjcc/authConfig/addMenu`, data)
+}
+
+/**
+ *  编辑菜单
+ */
+export function updateMenuAPI(data) {
+    return post(`${url}bjcc/authConfig/updateMenu`, data)
 }

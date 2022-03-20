@@ -1,33 +1,27 @@
 <template>
   <div>
     <el-card>
+      <el-button @click="handAdd">新增</el-button>
       <el-table
         :data="tableData"
         style="width: 100%; margin-bottom: 20px"
-        row-key="id"
+        row-key="menuId"
         border
-        default-expand-all
         :tree-props="{ children: 'childNode' }"
       >
-        <el-table-column prop="menuId" label="菜单ID" sortable />
-        <el-table-column prop="" label="菜单层级" sortable />
-        <el-table-column prop="menuName" label="菜单名称" sortable />
-        <el-table-column prop="pageUrl" label="菜单路径" sortable />
+        <el-table-column prop="menuId" label="菜单ID" />
+        <el-table-column prop="" label="菜单层级" />
+        <el-table-column prop="menuName" label="菜单名称" />
+        <el-table-column prop="pageUrl" label="菜单路径" />
         <el-table-column label="操作列">
           <template #default="scope">
             <el-button size="small" type="text" @click="handAdd(scope.row)"
               >新增</el-button
             >
-            <el-button
-              size="small"
-              type="text"
-              @click="handleEdit(scope.$index, scope.row)"
+            <el-button size="small" type="text" @click="handleEdit(scope.row)"
               >编辑</el-button
             >
-            <el-button
-              size="small"
-              type="text"
-              @click="handleEdit(scope.$index, scope.row)"
+            <el-button size="small" type="text" @click="handleDelete(scope.row)"
               >删除</el-button
             >
           </template>
@@ -35,18 +29,19 @@
       </el-table>
     </el-card>
     <dialog_
-      :dialogVisible="dialogVisible"
-      :title="title"
-      @close="dialogVisible = false"
-      @updated="updated"
+      :visible="visible"
+      @close="visible = false"
+      @refresh="refresh"
       :parentId="parentId"
+      :state="state"
+      :data="dialogData"
     />
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
-import { addMenuAPI, queryMenuAPI } from '@/api/router';
+import { queryMenuAPI } from '@/api/router';
 import dialog_ from './components/dialog.vue';
 
 export default defineComponent({
@@ -62,28 +57,43 @@ export default defineComponent({
       });
     };
     getTableDate();
-    console.log('sd', addMenuAPI());
     const formModel = {};
-    const dialogVisible = ref(false);
-    const title = ref('');
+    const visible = ref(false);
     const parentId = ref();
+    let state = ref('add');
+    let dialogData = ref();
+
     const handAdd = (row) => {
-      dialogVisible.value = true;
-      title.value = '新增';
+      state.value = 'add';
       parentId.value = row.menuId;
+      visible.value = true;
     };
-    const updated = () => {
+
+    const handleEdit = (row) => {
+      state.value = 'edit';
+      parentId.value = row.menuId;
+      dialogData.value = row;
+      visible.value = true;
+    };
+
+    const handleDelete = (row) => {
+      console.log('delete');
+    };
+
+    const refresh = () => {
       getTableDate();
-      dialogVisible.value = false;
+      visible.value = false;
     };
     return {
       tableData,
       formModel,
-      dialogVisible,
-      title,
+      visible,
       parentId,
+      state,
+      dialogData,
       handAdd,
-      updated,
+      refresh,
+      handleEdit,
     };
   },
 });

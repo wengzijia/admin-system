@@ -11,10 +11,11 @@
       >
         <el-table-column prop="username" label="用户名称" sortable />
         <el-table-column prop="phone" label="联系方式" sortable />
+        <el-table-column prop="role" label="角色" sortable />
         <el-table-column prop="state" label="状态" sortable />
         <el-table-column prop="memo" label="备注" sortable />
-        <el-table-column prop="startDate" label="创建时间" sortable />
-        <el-table-column prop="startDate" label="更新时间" sortable />
+        <el-table-column prop="createTime" label="创建时间" sortable />
+        <el-table-column prop="updateTime" label="更新时间" sortable />
         <el-table-column label="操作列">
           <template #default="scope">
             <el-button size="small" type="text" @click="handAdd(scope.row)"

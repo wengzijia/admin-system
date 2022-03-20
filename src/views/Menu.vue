@@ -32,7 +32,7 @@
             <el-sub-menu index="1-4">
               <template #title>Option4</template>
               <el-menu-item index="1-4-1">
-                <router-link to="/text"> 路由 </router-link>
+                <router-link to="/router"> 路由 </router-link>
               </el-menu-item>
               <el-menu-item index="1-4-2">
                 <router-link to="/role"> 角色 </router-link>
@@ -101,9 +101,9 @@
 
       <el-main>
         <el-scrollbar>
-          <el-card :body-style="{ padding: '20px',width:'100%',height:'100%' }">
+          <div :body-style="{ padding: '20px', width: '100%', height: '100%' }">
             <router-view></router-view>
-          </el-card>
+          </div>
         </el-scrollbar>
       </el-main>
     </el-container>
@@ -112,16 +112,16 @@
 
 <script lang="ts">
 import { ref } from 'vue';
-import { queryMenuAPI } from '@/api/menu.js'
+import { queryMenuAPI } from '@/api/menu.js';
 export default {
   setup() {
     const menuData = ref();
-    queryMenuAPI().then(res => {
-      console.log('menu=>', res)
-    })
+    queryMenuAPI().then((res) => {
+      console.log('menu=>', res);
+    });
     return {
-      menuData
-    }
-  }
-}
+      menuData,
+    };
+  },
+};
 </script>
