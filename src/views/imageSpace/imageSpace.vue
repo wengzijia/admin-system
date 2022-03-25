@@ -111,7 +111,7 @@ import type Node from 'element-plus/es/components/tree/src/model/node';
 import type { DragEvents } from 'element-plus/es/components/tree/src/model/useDragNode';
 import type { DropType } from 'element-plus/es/components/tree/src/tree.type';
 import { ref } from 'vue-demi';
-import { addImgFileAPI, queryAllFile, fileDelAPI } from '@/api/imageSpace';
+import { queryAllFile, fileDelAPI } from '@/api/imageSpace';
 import { ElMessageBox, ElMessage } from 'element-plus';
 import {
   FolderAdd,

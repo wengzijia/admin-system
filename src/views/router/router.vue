@@ -41,7 +41,7 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
-import { queryMenuAPI } from '@/api/router';
+import { queryMenuAPI, delMenuAPI } from '@/api/router';
 import dialog_ from './components/dialog.vue';
 
 export default defineComponent({
@@ -77,7 +77,16 @@ export default defineComponent({
     };
 
     const handleDelete = (row) => {
-      console.log('delete');
+      console.log(row);
+
+      let data = {
+        id: row.menuId,
+        menuName: row.menuName,
+        pageUrl: row.menuName,
+      };
+      delMenuAPI(data).then(() => {
+        getTableDate();
+      });
     };
 
     const refresh = () => {
@@ -94,6 +103,7 @@ export default defineComponent({
       handAdd,
       refresh,
       handleEdit,
+      handleDelete,
     };
   },
 });

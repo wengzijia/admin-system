@@ -48,6 +48,7 @@ export default defineComponent({
       parentId: null,
       menuName: '',
       pageUrl: '',
+      id: '',
     });
 
     const visible_ = computed(() => {
@@ -58,9 +59,12 @@ export default defineComponent({
     });
 
     const disabled = ref(false);
+
     watch(visible_, () => {
       getParenStatus = true;
+
       formModel.value.parentId = getParentId(props.parentId, options.value);
+      // 根据状态 展示数据
       if (state_.value === 'add') {
         clear();
       } else if (state_.value === 'edit') {
@@ -71,9 +75,10 @@ export default defineComponent({
     const options = ref([]);
     queryMenuAPI().then((res) => {
       options.value = res.data.menuNodes;
-      console.log('parent');
     });
+
     let getParenStatus = true;
+    // 选找路由对应路由地址
     const getParentId = (id, arr) => {
       let parentId = [];
       arr.map((item) => {
@@ -96,6 +101,7 @@ export default defineComponent({
       formModel.value.pageUrl = '';
     };
     const getData = () => {
+      formModel.value.id = props.data.menuId;
       formModel.value.menuName = props.data.menuName;
       formModel.value.pageUrl = props.data.pageUrl;
     };
@@ -110,15 +116,18 @@ export default defineComponent({
 
     const submit = () => {
       formRef.value.validate((valid) => {
+        let data = formModel.value;
         if (valid) {
-          formModel.value.parentId =
-            formModel.value.parentId[formModel.value.parentId.length - 1];
+          data.parentId = data.parentId[data.parentId.length - 1];
           if (props.state === 'add') {
-            addMenuAPI(formModel.value).then(() => {
+            addMenuAPI(data).then(() => {
               context.emit('refresh');
             });
           } else {
-            updateMenuAPI(formModel.value).then(() => {
+            if (data.id === data.parentId) {
+              data.parentId = 0; // 相同则为第一层
+            }
+            updateMenuAPI(data).then(() => {
               context.emit('refresh');
             });
           }

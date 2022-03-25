@@ -32,16 +32,16 @@ body {
     box-shadow: 0 0 2rem 0 #e6eaf0;
   }
   .el-aside {
-    width: 240px;
+    // width: 240px;
     color: rgba(233, 236, 239, 0.5);
-    background: #222e3c !important;
+    // background: #222e3c !important;
     border-right: solid 1px #e6e6e6;
     box-sizing: border-box;
   }
   .el-menu {
     border-right: none;
-    background: #222e3c;
-    color: rgba(233, 236, 239, 0.5);
+    // background: #222e3c;
+    // color: rgba(233, 236, 239, 0.5);
   }
   .el-main {
     padding: 40px;

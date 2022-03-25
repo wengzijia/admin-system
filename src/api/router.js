@@ -20,3 +20,10 @@ export function addMenuAPI(data) {
 export function updateMenuAPI(data) {
     return post(`${url}bjcc/authConfig/updateMenu`, data)
 }
+
+/**
+ *  删除菜单
+ */
+export function delMenuAPI(data) {
+    return post(`${url}bjcc/sp/delMenu`, data)
+}

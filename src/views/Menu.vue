@@ -3,6 +3,14 @@
     class="layout-container-demo"
     style="width: 100%; height: 100%; position: fixed"
   >
+    <el-aside width="100px" class="personal">
+      <div style="text-align: center; margin-top: 20px">
+        <el-avatar :size="50" :src="circleUrl" />
+      </div>
+      <div style="width: 50px; height: 50px">
+        <Icon :icon="iconName"></Icon>
+      </div>
+    </el-aside>
     <el-aside width="200px">
       <el-scrollbar>
         <el-menu :default-openeds="['1', '3']">
@@ -42,40 +50,6 @@
               </el-menu-item>
             </el-sub-menu>
           </el-sub-menu>
-          <el-sub-menu index="2">
-            <template #title>
-              <el-icon><icon-menu /></el-icon>Navigator Two
-            </template>
-            <el-menu-item-group>
-              <template #title>Group 1</template>
-              <el-menu-item index="2-1">Option 1</el-menu-item>
-              <el-menu-item index="2-2">Option 2</el-menu-item>
-            </el-menu-item-group>
-            <el-menu-item-group title="Group 2">
-              <el-menu-item index="2-3">Option 3</el-menu-item>
-            </el-menu-item-group>
-            <el-sub-menu index="2-4">
-              <template #title>Option 4</template>
-              <el-menu-item index="2-4-1">Option 4-1</el-menu-item>
-            </el-sub-menu>
-          </el-sub-menu>
-          <el-sub-menu index="3">
-            <template #title>
-              <el-icon><setting /></el-icon>Navigator Three
-            </template>
-            <el-menu-item-group>
-              <template #title>Group 1</template>
-              <el-menu-item index="3-1">Option 1</el-menu-item>
-              <el-menu-item index="3-2">Option 2</el-menu-item>
-            </el-menu-item-group>
-            <el-menu-item-group title="Group 2">
-              <el-menu-item index="3-3">Option 3</el-menu-item>
-            </el-menu-item-group>
-            <el-sub-menu index="3-4">
-              <template #title>Option 4</template>
-              <el-menu-item index="3-4-1">Option 4-1</el-menu-item>
-            </el-sub-menu>
-          </el-sub-menu>
         </el-menu>
       </el-scrollbar>
     </el-aside>
@@ -112,16 +86,33 @@
 
 <script lang="ts">
 import { ref } from 'vue';
-import { queryMenuAPI } from '@/api/menu.js';
+import { queryMenuAPI } from '@/api/router';
+
 export default {
   setup() {
     const menuData = ref();
     queryMenuAPI().then((res) => {
       console.log('menu=>', res);
     });
+
+    const iconName = 'Search';
     return {
       menuData,
+      circleUrl:
+        'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
+      iconName,
     };
   },
 };
 </script>
+
+<style scoped lang="scss">
+.personal {
+  background-color: rgba(0, 21, 41, 1);
+}
+.icon {
+  width: 50px;
+  height: 50px;
+  color: aliceblue;
+}
+</style>
