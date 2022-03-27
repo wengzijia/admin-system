@@ -32,7 +32,6 @@
       :visible="visible"
       @close="visible = false"
       @refresh="refresh"
-      :parentId="parentId"
       :state="state"
       :data="dialogData"
     />
@@ -59,19 +58,17 @@ export default defineComponent({
     getTableDate();
     const formModel = {};
     const visible = ref(false);
-    const parentId = ref();
     let state = ref('add');
     let dialogData = ref();
 
     const handAdd = (row) => {
       state.value = 'add';
-      parentId.value = row.menuId;
+      dialogData.value = row;
       visible.value = true;
     };
 
     const handleEdit = (row) => {
       state.value = 'edit';
-      parentId.value = row.menuId;
       dialogData.value = row;
       visible.value = true;
     };
@@ -97,7 +94,6 @@ export default defineComponent({
       tableData,
       formModel,
       visible,
-      parentId,
       state,
       dialogData,
       handAdd,

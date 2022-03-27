@@ -5,7 +5,7 @@ const routes: Array<RouteRecordRaw> = [
     path: '/',
     redirect: () => {
       return { path: '/home' }
-    } ,
+    },
   },
   {
     path: '/',
@@ -67,6 +67,14 @@ const routes: Array<RouteRecordRaw> = [
         // this generates a separate chunk (about.[hash].js) for this route
         // which is lazy-loaded when the route is visited.
         component: () => import(/* webpackChunkName: "setting" */ '../views/user/user.vue'),
+      },
+      {
+        path: 'goods',
+        name: 'goods',
+        // route level code-splitting
+        // this generates a separate chunk (about.[hash].js) for this route
+        // which is lazy-loaded when the route is visited.
+        component: () => import(/* webpackChunkName: "setting" */ '../views/goods/goods.vue'),
       }
     ]
   },

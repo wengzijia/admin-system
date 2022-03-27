@@ -28,7 +28,7 @@
       <el-button>更多搜索</el-button>
     </el-form>
     <!-- 列表 -->
-    <el-table :data="tableData" border style="width: 100%">
+    <el-table :data="tableData" stripe style="width: 100%">
       <!-- 生成列 -->
       <template v-for="(item, index) in columns" :key="index">
         <el-table-column :prop="item.name" :width="item.width">
@@ -40,9 +40,7 @@
           </template>
           <!-- 列 -->
           <template #default="{ row }">
-            <slot :name="'col-' + col.name" :row="row">{{
-              row[col.name]
-            }}</slot>
+            <slot :name="item.name" :row="row">{{ row[item.name] }}</slot>
           </template>
         </el-table-column>
       </template>

@@ -1,12 +1,12 @@
 <template>
   <el-dialog
     v-model="visible_"
-    :title="title_"
+    :title="state_ === 'add' ? '新增' : '编辑'"
     :width="width"
     :before-close="handleClose"
   >
     <el-form :model="formModel" ref="formRef" :rules="rules">
-      <el-form-item label="父级:" prop="parentId" v-if="state_ === 'add'">
+      <el-form-item label="父级:" prop="parentId">
         <el-cascader
           :options="options"
           v-model="formModel.parentId"
@@ -19,7 +19,7 @@
       <el-form-item label="菜单名称:" prop="menuName">
         <el-input v-model="formModel.menuName" style="width: 214px"></el-input>
       </el-form-item>
-      <el-form-item label="菜单路径:" prop="pageUrl">
+      <el-form-item label="菜单路径:">
         <el-input v-model="formModel.pageUrl" style="width: 214px"></el-input>
       </el-form-item>
       <el-form-item label="菜单唯一ID:">
@@ -57,13 +57,17 @@ export default defineComponent({
     const state_ = computed(() => {
       return props.state;
     });
+    console.log(state_, 'ads');
 
     const disabled = ref(false);
 
     watch(visible_, () => {
       getParenStatus = true;
 
-      formModel.value.parentId = getParentId(props.parentId, options.value);
+      formModel.value.parentId = getParentId(
+        props.data.parentId,
+        options.value
+      );
       // 根据状态 展示数据
       if (state_.value === 'add') {
         clear();
@@ -99,6 +103,8 @@ export default defineComponent({
     const clear = () => {
       formModel.value.menuName = '';
       formModel.value.pageUrl = '';
+      formModel.value.parentId = null;
+      formModel.value.id = null;
     };
     const getData = () => {
       formModel.value.id = props.data.menuId;
@@ -107,7 +113,6 @@ export default defineComponent({
     };
 
     const width_ = ref(props.width);
-    const title_ = '新增';
     const formRef = ref();
 
     const handleClose = () => {
@@ -117,16 +122,18 @@ export default defineComponent({
     const submit = () => {
       formRef.value.validate((valid) => {
         let data = formModel.value;
+        console.log(valid);
+
         if (valid) {
-          data.parentId = data.parentId[data.parentId.length - 1];
+          if (data.parentId && data.parentId.length > 0) {
+            data.parentId = data.parentId[data.parentId.length - 1];
+          }
+          console.log('asd');
           if (props.state === 'add') {
             addMenuAPI(data).then(() => {
               context.emit('refresh');
             });
           } else {
-            if (data.id === data.parentId) {
-              data.parentId = 0; // 相同则为第一层
-            }
             updateMenuAPI(data).then(() => {
               context.emit('refresh');
             });
@@ -146,7 +153,6 @@ export default defineComponent({
       options,
       visible_,
       width_,
-      title_,
       formModel,
       formRef,
       handleClose,
@@ -159,13 +165,6 @@ export default defineComponent({
           {
             required: true,
             message: '请输入菜单名称',
-            trigger: 'change',
-          },
-        ],
-        pageUrl: [
-          {
-            required: true,
-            message: '请输入菜单路径',
             trigger: 'change',
           },
         ],
@@ -187,10 +186,6 @@ export default defineComponent({
     width: {
       type: String,
       default: '30%',
-    },
-    parentId: {
-      type: [Number],
-      default: null,
     },
     state: {
       type: String,
