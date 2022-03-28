@@ -7,7 +7,12 @@
         </div>
       </template>
     </ap-list>
-    <apSelect />
+    <apSelect
+      :api="queryMenuAPI_"
+      :outputArray="outputArray"
+      value="menuId"
+      label="menuName"
+    />
   </div>
 </template>
 
@@ -15,6 +20,8 @@
 import { ref } from 'vue';
 import apList from '@/components/ap-list/index.vue';
 import apSelect from '@/components/ap-select/index.vue';
+import { queryMenuAPI } from '@/api/router';
+
 export default {
   components: {
     apList,
@@ -47,6 +54,8 @@ export default {
         label: '操作',
       },
     ]);
+
+    const queryMenuAPI_ = ref(queryMenuAPI);
     return {
       column,
       modelData: [
@@ -58,6 +67,9 @@ export default {
           time: 'time',
         },
       ],
+      queryMenuAPI_,
+      outputArray: ['data', 'menuNodes'],
+      menuId: 'menuId',
     };
   },
 };
