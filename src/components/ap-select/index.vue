@@ -2,7 +2,7 @@
   <el-select
     v-model="model"
     value-key=""
-    placeholder=""
+    placeholder="请选择"
     clearable
     filterable
     @change="changeSelect"
@@ -79,10 +79,10 @@ export default {
       },
     },
     // 下拉数据 key 值
-    key: {
+    value: {
       type: String,
       default: () => {
-        return 'key';
+        return 'value';
       },
     },
     // 下拉数据 label 值
@@ -93,12 +93,12 @@ export default {
       },
     },
     // 绑定数据
-    value: {
-      type: [String, Array],
-      default: () => {
-        return '';
-      },
-    },
+    // value: {
+    //   type: [String, Array],
+    //   default: () => {
+    //     return '';
+    //   },
+    // },
   },
 };
 </script>
