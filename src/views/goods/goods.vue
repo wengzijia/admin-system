@@ -11,6 +11,12 @@
       </template>
     </ap-list>
     <dataBox :visible="visible" />
+    <apSelect
+      :api="queryMenuAPI_"
+      :outputArray="outputArray"
+      value="menuId"
+      label="menuName"
+    />
   </div>
 </template>
 
@@ -18,6 +24,8 @@
 import { ref } from 'vue';
 import apList from '@/components/ap-list/index.vue';
 import dataBox from './components/dataBox.vue';
+import apSelect from '@/components/ap-select/index.vue';
+import { queryMenuAPI } from '@/api/router';
 
 export default {
   components: {
@@ -35,6 +43,34 @@ export default {
       visible.value = false;
     };
 
+    let column = ref([
+      {
+        name: 'commodityName',
+        label: '商品/价格',
+      },
+      {
+        name: 'className',
+        label: '商品类目',
+      },
+      {
+        name: 'unit',
+        label: '库存单位',
+      },
+      {
+        name: 'status',
+        label: '商品状态',
+      },
+      {
+        name: 'time',
+        label: '创建时间',
+      },
+      {
+        name: 'as',
+        label: '操作',
+      },
+    ]);
+
+    const queryMenuAPI_ = ref(queryMenuAPI);
     return {
       visible,
       add,
@@ -127,6 +163,9 @@ export default {
           type: 'input',
         },
       ],
+      queryMenuAPI_,
+      outputArray: ['data', 'menuNodes'],
+      menuId: 'menuId',
     };
   },
 };

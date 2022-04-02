@@ -8,8 +8,8 @@
     @change="changeSelect"
   >
     <el-option
-      v-for="item in options"
-      :key="item.value"
+      v-for="(item, index) in options"
+      :key="index"
       :label="item.label"
       :value="item.value"
     >
@@ -18,11 +18,11 @@
 </template>
 
 <script lang="ts">
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 
 export default {
   setup(props, { emit }) {
-    let model = ref();
+    let model = ref(null);
     // 先将数据初始化
     let options = ref(props.option);
     // 判断是否需要发送请求
@@ -34,18 +34,23 @@ export default {
           arr = arr[item];
         });
         // 根据 key，label 进行数据处理
+        let value = props.value;
+        let label = props.label;
         options.value = arr.map((item) => {
           let data = {
-            value: item[props.key],
-            label: item[props.label],
+            value: item[value],
+            label: item[label],
           };
           return data;
         });
+
+        console.log('options', options.value);
       });
     }
 
     const changeSelect = (val) => {
       emit('input', val);
+      console.log(val);
     };
     return { model, changeSelect, options };
   },
